@@ -1,6 +1,8 @@
 __author__ = 'Daniel'
 import random
-from read import Read
+
+from haplotypeassembly.easy_medium.read import Read
+
 
 class DataGenerator(object):
     def __init__(self, size):
@@ -27,11 +29,7 @@ class DataGenerator(object):
             result += str(c)
         return result
 
-    def create_reads(self, min_size, max_size, min_distance, max_distance):
-        if max_distance >= min_size:
-            print "Error, might not have read for location."
-            print "max_distance should be greater than or equal to min_size."
-            return
+    def create_reads(self, min_size, max_size, min_distance, max_distance, error):
         if min_distance > max_distance or min_size > max_size:
             print "Error. Max must be >= min."
             return
@@ -42,9 +40,9 @@ class DataGenerator(object):
                 data = self.hap1[index:index + read_size]
             else:
                 data = self.hap2[index:index + read_size]
-            read = Read(index, read_size, data)
+            read = Read(index, read_size, data, error)
             self.reads.append(read)
-            index += random.randint(min_distance, max_distance)
+            index += min(random.randint(min_distance, max_distance), read_size - 1)
 
 
     @classmethod

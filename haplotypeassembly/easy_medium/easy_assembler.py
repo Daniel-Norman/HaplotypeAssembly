@@ -1,5 +1,5 @@
 __author__ = 'Daniel'
-class GreedyEasy:
+class EasyAssembler:
 
     @classmethod
     def assemble_haplotype(cls, reads, size):
