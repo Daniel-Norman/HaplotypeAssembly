@@ -2,10 +2,10 @@ __author__ = 'Daniel'
 import random
 
 class Read(object):
-    def __init__(self, start_index, size, data, error):
+    def __init__(self, start_index, data, error):
         self.start_index = start_index
-        self.size = size
         self.data = [c if random.random() > error else ~c & 1 for c in data]
+        self.size = len(self.data)
         self.flipped_data = [~c & 1 for c in self.data]
 
     def __repr__(self):

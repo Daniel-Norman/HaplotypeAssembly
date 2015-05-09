@@ -29,7 +29,7 @@ class DataGenerator(object):
             result += str(c)
         return result
 
-    def create_reads(self, min_size, max_size, min_distance, max_distance, error):
+    def create_reads(self, min_size, max_size, min_distance, max_distance, error, overlap_chance):
         if min_distance > max_distance or min_size > max_size:
             print "Error. Max must be >= min."
             return
@@ -40,14 +40,9 @@ class DataGenerator(object):
                 data = self.hap1[index:index + read_size]
             else:
                 data = self.hap2[index:index + read_size]
-            read = Read(index, read_size, data, error)
-            self.reads.append(read)
-            index += min(random.randint(min_distance, max_distance), read_size - 1)
+            if len(data) > 0:
+                read = Read(index, data, error)
+                self.reads.append(read)
+            if random.random() > overlap_chance:
+                index += min(random.randint(min_distance, max_distance), read_size - 1)
 
-
-    @classmethod
-    def print_haplotype(cls, haplotype):
-        result = ""
-        for c in haplotype:
-            result += str(c)
-        print result
