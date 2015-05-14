@@ -13,7 +13,7 @@ class DataGenerator(object):
         self.hap1 = []
         self.hap2 = []
         self.reads = []
-        for _ in range(0, size / 25):
+        for k in range(0, size / 25):
             chunk = random.getrandbits(25)
             for i in range(0, 25):
                 choice = (chunk & (1 << i)) >> i

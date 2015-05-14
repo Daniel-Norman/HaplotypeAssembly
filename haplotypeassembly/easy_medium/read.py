@@ -4,7 +4,7 @@ import random
 class Read(object):
     def __init__(self, start_index, data, error):
         self.start_index = start_index
-        self.data = [c if random.random() > error else random.choice([0, 1]) for c in data]
+        self.data = [c if error == 0 or random.random() > error else random.choice([0, 1]) for c in data]
         self.size = len(self.data)
         self.flipped_data = [~c & 1 for c in self.data]
 

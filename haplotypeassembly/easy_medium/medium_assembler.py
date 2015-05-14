@@ -3,13 +3,12 @@ import random
 
 class MediumAssembler:
     @classmethod
-    def assemble_haplotype(cls, reads, size):
+    def assemble_haplotype(cls, reads, size, overlap_requirement, match_requirement):
         corr_list = []
-        haplotype_probs = [] * size
+        haplotype_probs = [[0.0, 0.0] for _ in range(0, size)]
         setA = set()
         setB = set()
         for i in range(0, len(reads)):
-            haplotype_probs.append([0.0, 0.0])
             read1 = reads[i]
             j = i + 1
             corr_list.append([])
@@ -22,16 +21,10 @@ class MediumAssembler:
                     if read2.data[k - read2.start_index] == read1.data[k - read1.start_index]:
                         matches += 1
                     count += 1
-                if count > 4:
-                    if matches / count >= 0.6:
+                if count > overlap_requirement:
+                    if matches / count > match_requirement:
                         if len(setA) == 0:
                             setA.add(i)
-                        '''
-                        if i in setA and j not in setB and j not in setB:
-                            setA.add(j)
-                        elif i in setB and j not in setB and j not in setB:
-                            setB.add(j)
-                        '''
                         if i in setA:
                             if j in setB:
                                 setB.remove(j)
@@ -44,14 +37,9 @@ class MediumAssembler:
                                 setB.remove(i)
                             else:
                                 setB.add(j)
-                        #print i, " correlates with ", j
-                    if matches / count <= 0.4:
-                        '''
-                        if i in setA and j not in setB and j not in setB:
-                            setB.add(j)
-                        elif i in setB and j not in setB and j not in setB:
-                            setA.add(j)
-                        '''
+                    if matches / count < (1 - match_requirement):
+                        if len(setA) == 0:
+                            setA.add(i)
                         if i in setA:
                             if j in setA:
                                 setA.remove(j)
@@ -64,7 +52,6 @@ class MediumAssembler:
                                 setB.remove(i)
                             else:
                                 setA.add(j)
-                        #print i, " correlates with ~", j
                 j += 1
         setC = setA if len(setA) > len(setB) else setB
         for i in setC:
