@@ -1,7 +1,7 @@
 __author__ = 'Daniel'
 import random
 
-from haplotypeassembly.easy_medium.read import Read
+from haplotypeassembly.hard.read import Read
 
 
 class DataGeneratorHard(object):

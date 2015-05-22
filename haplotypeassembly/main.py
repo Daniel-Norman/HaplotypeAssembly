@@ -3,10 +3,12 @@ from haplotypeassembly.easy_medium.data_generator import DataGenerator
 from haplotypeassembly.hard.data_generator import DataGeneratorHard
 from haplotypeassembly.easy_medium.easy_assembler import EasyAssembler
 from haplotypeassembly.easy_medium.medium_assembler import MediumAssembler
+from haplotypeassembly.hard.hard_assembler import HardAssembler
 import time
 
 def main():
 
+    '''
     easy_sd_sum = 0.0
     medium_sd_sum = 0.0
     reads_sum = 0.0
@@ -48,6 +50,7 @@ def main():
 
     size = 1000
 
+    '''
 
     gen = DataGenerator(size)
 
@@ -80,17 +83,36 @@ def main():
 
     '''
 
-    '''
+    size = 100
 
     genH = DataGeneratorHard(size)
-    print genH
+    print genH, "\n"
 
-    genH.create_reads(min_size=8, max_size=10, min_distance=0, max_distance=1, error=0.2, overlap_chance=0.9)
-    for read in genH.reads:
-        print read
+    genH.create_reads(min_size=10, max_size=20, min_distance=0, max_distance=1, error=0.0, overlap_chance=0.9)
+    #for read in genH.reads:
+        #print read
+
+    assembled_haps = HardAssembler.assemble_haplotype(reads=genH.reads, size=len(genH.hap1), overlap_requirement=7, match_requirement=0.7)
 
 
-    '''
+    gen_haps = [genH.hap1, genH.hap2, genH.hap3]
+
+    for hap in gen_haps:
+        min_hap = 0
+        min_sd = switch_distance(hap, assembled_haps[0])
+        sd = switch_distance(hap, assembled_haps[1])
+        if sd < min_sd:
+            min_sd = sd
+            min_hap = 1
+        sd = switch_distance(hap, assembled_haps[2])
+        if sd < min_sd:
+            min_sd = sd
+            min_hap = 2
+
+        print_haplotype(assembled_haps[min_hap])
+
+
+
 
 def switch_distance(hap1, hap2):
     count = 0
